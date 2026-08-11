@@ -1,0 +1,6 @@
+{
+  "//": "Self-contained guardrail: when this folder itself is opened as the Claude Code project root, '.' means 'this folder', so Claude cannot read/write/run commands outside it (e.g. via absolute paths or 'cd ..'). This complements ../../.claude (used when test_code is opened as the root instead).",
+  "allowedProjectDirs": [
+    "."
+  ]
+}
