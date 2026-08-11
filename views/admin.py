@@ -9,8 +9,11 @@ import streamlit as st
 
 from src import db
 from src.config import SERIES
+from src.theme import inject_theme
 
-st.set_page_config(page_title="管理者ページ", page_icon="🛠️", layout="wide")
+st.set_page_config(page_title="管理者ページ｜MACRO SIGNALS", page_icon="🛠️", layout="wide")
+
+inject_theme()
 
 st.title("🛠️ 管理者ページ: DB更新")
 st.caption("FREDから最新データを取得し、ローカルDB(data/macro_dashboard.sqlite3)へ保存します。")
