@@ -16,10 +16,13 @@ from plotly.subplots import make_subplots
 
 from src import db
 from src.config import SERIES
+from src.theme import country_accent, inject_theme
 
 
 def render_metric_detail_page(metric_key: str) -> None:
     """指標1つ分の詳細ページ(最新値・時系列グラフ・生データ)を描画する。"""
+    inject_theme()
+
     metric = SERIES[metric_key]
     countries = metric["countries"]
 
@@ -56,7 +59,13 @@ def render_metric_detail_page(metric_key: str) -> None:
     for i, (country_key, s) in enumerate(series_map.items()):
         if s.empty:
             continue
-        trace = go.Scatter(x=s.index, y=s.values, mode="lines", name=countries[country_key]["label"])
+        trace = go.Scatter(
+            x=s.index,
+            y=s.values,
+            mode="lines",
+            name=countries[country_key]["label"],
+            line=dict(color=country_accent(country_key), width=2),
+        )
         if dual_axis:
             fig.add_trace(trace, secondary_y=(i == 1))
         else:
