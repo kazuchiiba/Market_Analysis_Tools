@@ -1,8 +1,12 @@
 # マクロ経済ダッシュボード
 
+> **🤖 このプロジェクトについて**: 本リポジトリは [Claude](https://claude.com/claude-code) との対話(vibecoding)でコードの大部分を生成しています。設計・実装・README含め、AIエージェントに指示を出しながら作成したものです。ご利用・改変は自由ですが、その前提でご覧ください。
+
 日本とアメリカの主要マクロ指標を1画面で確認できるStreamlit製ツールです。「市場データサマリ」で最新値を一覧し、各指標をクリックすると日次の時系列推移画面に遷移できます。
 
 ## クイックスタート(ダウンロード後にやること)
+
+本リポジトリには取得済みのローカルDB(`data/macro_dashboard.sqlite3`)を同梱しているため、**APIキーなしで、依存パッケージを入れてすぐに閲覧できます。**
 
 ### 1. 依存パッケージのインストール
 
@@ -12,7 +16,15 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-### 2. FRED APIキーの取得・設定
+### 2. 起動
+
+```bash
+streamlit run app.py
+```
+
+ブラウザで `http://localhost:8501` が自動的に開きます。同梱DBの最新値がそのまま表示されます。
+
+### 3. データを最新化したい場合(任意)
 
 1. https://fred.stlouisfed.org/docs/api/api_key.html で無料のAPIキーを取得(登録後すぐ発行されます)
 2. `.env.example` を `.env` にコピーし、取得したキーを設定
@@ -25,19 +37,9 @@ copy .env.example .env   # Windows
 FRED_API_KEY=取得したキー
 ```
 
+3. アプリを再起動し、サイドバー一番下の **「🛠️ 管理者ページ」** を開いて「🔄 FREDからDBを更新」ボタンを押す
+
 `.env` は `.gitignore` 対象なので、GitHubには絶対に上がりません。GitHubに上がるのは `.env.example`(値が空欄のテンプレート)だけです。詳しくは [APIキーの取り扱い](#apiキーの取り扱い) を参照してください。
-
-### 3. 起動
-
-```bash
-streamlit run app.py
-```
-
-ブラウザで `http://localhost:8501` が自動的に開きます。
-
-### 4. 初回データ取得
-
-起動直後はDBが空です。サイドバー一番下の **「🛠️ 管理者ページ」** を開き、「🔄 FREDからDBを更新」ボタンを押してください。以降はダッシュボードに実データが表示されます。
 
 ## 見られる情報
 
@@ -125,14 +127,14 @@ src/
   db.py                       # SQLite保存・読み出し・一括更新(refresh_all)
   charts.py                   # 推移ページの共通描画処理(DBを読む)
 data/
-  macro_dashboard.sqlite3     # ローカルDB本体(gitignore対象、管理者ページから再生成可能)
+  macro_dashboard.sqlite3     # ローカルDB本体(取得済みデータをリポジトリに同梱、管理者ページから再生成も可能)
 ```
 
 ## APIキーの取り扱い
 
 - 実際のAPIキーは `.env` にのみ書く。`.env` は `.gitignore` に登録済みで、`git status` / `git add` の対象に出てこないことを確認済み
-- リポジトリに含まれるのは `.env.example`(`FRED_API_KEY=` の値が空欄のテンプレート)だけ。GitHubをcloneした人は、自分で取得したキーを自分の `.env` に設定する必要がある
-- `data/`(SQLite DB本体)も `.gitignore` 対象。取得済みデータそのものもGitHubには上がらない
+- リポジトリに含まれるのは `.env.example`(`FRED_API_KEY=` の値が空欄のテンプレート)だけ。GitHubをcloneした人は、データを更新したい場合のみ自分で取得したキーを自分の `.env` に設定する必要がある(閲覧するだけなら同梱DBがあるため不要)
+- `data/`(SQLite DB本体)はあえて `.gitignore` の対象外にしている。中身はFREDから取得した公開の経済統計値と更新日時のみで、APIキーや個人情報は含まれない(確認済み)。ダウンロードした人がAPIキーを用意しなくてもすぐにダッシュボードを試せるようにするための判断
 - プロジェクト全体をgrepして確認済み: APIキー・メールアドレス等の個人情報は `.env` 以外のファイルに含まれていない
 
 ## 補足
