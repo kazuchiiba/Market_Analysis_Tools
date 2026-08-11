@@ -1,0 +1,24 @@
+# 秘密情報
+.env
+
+# 中身未確定のドラフトファイル(公開対象外)
+CONTENTS.md
+DESIGN.md
+
+# ローカルDB(FREDから取得した時系列データの保存先。管理者ページから再生成可能)
+data/
+
+# 旧バージョンのファイルキャッシュ(DB化に伴い廃止。残っていれば無視)
+data_cache/
+
+# 自動生成レポート(scripts/generate_report.py の出力。いつでも再生成できる)
+reports/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Streamlit
+.streamlit/secrets.toml

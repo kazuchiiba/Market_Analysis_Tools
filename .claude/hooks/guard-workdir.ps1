@@ -96,7 +96,7 @@ foreach ($key in @('file_path', 'path', 'notebook_path')) {
 if ($toolName -in @('PowerShell', 'Bash') -and ($toolInput.PSObject.Properties.Name -contains 'command')) {
     $cmd = [string]$toolInput.command
 
-    if ($cmd -match '\.\.[\\/]') {
+    if ($cmd -match '(?<![\w.])\.\.(?![\w.])') {
         Deny "Blocked by working-directory guardrail: command references a parent directory ('..'), which could escape the active project ($scopeLabel)."
     }
 
